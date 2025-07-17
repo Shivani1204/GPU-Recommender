@@ -377,9 +377,11 @@ def recommend():
     recommendation = get_gpu_recommendation(model_size, throughput_needs, budget)
     return jsonify(recommendation)
 
-# This is needed for Vercel
-def handler(request):
-    return app(request)
+# WSGI handler for Vercel
+from flask import Response
+def handler(environ, start_response):
+    return app.wsgi_app(environ, start_response)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
