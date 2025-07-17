@@ -55,7 +55,7 @@ def get_gpu_recommendation(model_size, throughput_needs, budget):
             "color": "linear-gradient(135deg, #8B4513 0%, #1A1A1A 100%)"
         }
     }
-    
+
     # More detailed logic based on all three parameters
     if model_size == "≤3B":
         return recommendations["≤3B"]
@@ -69,11 +69,11 @@ def get_gpu_recommendation(model_size, throughput_needs, budget):
         if throughput_needs in ["high", "very_high"] or budget == "high":
             return recommendations["30-70B"]
         else:
-            return recommendations["13-30B"]
+            return recommendations["13-30B"] # Fallback if throughput/budget not high enough
     elif model_size == "70B+":
         return recommendations["70B+"]
-    
-    return recommendations["≤3B"]
+
+    return recommendations["≤3B"] # Default recommendation
 
 HTML_TEMPLATE = """
 <!DOCTYPE html>
@@ -88,7 +88,7 @@ HTML_TEMPLATE = """
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #FF6B35 0%, #1A1A1A 100%);
@@ -98,7 +98,7 @@ HTML_TEMPLATE = """
             justify-content: center;
             padding: 20px;
         }
-        
+
         .container {
             background: #1F1F1F;
             border-radius: 20px;
@@ -109,12 +109,12 @@ HTML_TEMPLATE = """
             animation: slideIn 0.5s ease-out;
             border: 2px solid #FF6B35;
         }
-        
+
         @keyframes slideIn {
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        
+
         h1 {
             color: #FF6B35;
             text-align: center;
@@ -123,11 +123,11 @@ HTML_TEMPLATE = """
             font-weight: 600;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-        
+
         .form-group {
             margin-bottom: 25px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
@@ -135,7 +135,7 @@ HTML_TEMPLATE = """
             font-weight: 500;
             font-size: 1.1em;
         }
-        
+
         select, input {
             width: 100%;
             padding: 15px;
@@ -146,14 +146,14 @@ HTML_TEMPLATE = """
             background: #2A2A2A;
             color: #FFFFFF;
         }
-        
+
         select:focus, input:focus {
             outline: none;
             border-color: #FF8C42;
             background: #333333;
             box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.3);
         }
-        
+
         .btn {
             width: 100%;
             padding: 15px;
@@ -167,16 +167,16 @@ HTML_TEMPLATE = """
             transition: all 0.3s ease;
             margin-top: 20px;
         }
-        
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        
+
         .btn:active {
             transform: translateY(0);
         }
-        
+
         .result {
             margin-top: 30px;
             padding: 25px;
@@ -184,48 +184,48 @@ HTML_TEMPLATE = """
             display: none;
             animation: fadeIn 0.5s ease-out;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .result h3 {
             font-size: 1.8em;
             margin-bottom: 15px;
             color: white;
         }
-        
+
         .result-content {
             background: rgba(255,255,255,0.1);
             padding: 20px;
             border-radius: 10px;
             backdrop-filter: blur(10px);
         }
-        
+
         .result-item {
             margin-bottom: 10px;
             color: white;
             font-size: 1.1em;
         }
-        
+
         .result-item strong {
             color: #fff;
         }
-        
+
         .loading {
             text-align: center;
             color: #FF6B35;
             font-size: 1.2em;
             margin-top: 20px;
         }
-        
+
         .gpu-icon {
             font-size: 2em;
             margin-bottom: 10px;
             text-align: center;
         }
-        
+
         .flowchart-info {
             background: rgba(255, 107, 53, 0.1);
             border-left: 4px solid #FF6B35;
@@ -233,12 +233,12 @@ HTML_TEMPLATE = """
             margin-bottom: 30px;
             border-radius: 5px;
         }
-        
+
         .flowchart-info h4 {
             color: #FF6B35;
             margin-bottom: 10px;
         }
-        
+
         .flowchart-info p {
             color: #CCCCCC;
             line-height: 1.6;
@@ -248,12 +248,12 @@ HTML_TEMPLATE = """
 <body>
     <div class="container">
         <h1>GPU Recommender</h1>
-        
+
         <div class="flowchart-info">
             <h4>GPU Recommender System</h4>
             <p>This tool helps you select the optimal GPU for your machine learning workloads based on model size, throughput requirements, and budget constraints.</p>
         </div>
-        
+
         <form id="gpuForm">
             <div class="form-group">
                 <label for="model_size">Model Size:</label>
@@ -267,7 +267,7 @@ HTML_TEMPLATE = """
                     <option value="70B+">70B+ Parameters (Massive)</option>
                 </select>
             </div>
-            
+
             <div class="form-group">
                 <label for="throughput_needs">Throughput Requirements:</label>
                 <select id="throughput_needs" name="throughput_needs" required>
@@ -279,7 +279,7 @@ HTML_TEMPLATE = """
                     <option value="very_high">Very High (Enterprise Scale)</option>
                 </select>
             </div>
-            
+
             <div class="form-group">
                 <label for="budget">Budget Range:</label>
                 <select id="budget" name="budget" required>
@@ -291,14 +291,14 @@ HTML_TEMPLATE = """
                     <option value="very_high">Very High ($20,000+)</option>
                 </select>
             </div>
-            
+
             <button type="submit" class="btn">Get GPU Recommendation</button>
         </form>
-        
+
         <div id="loading" class="loading" style="display: none;">
             Analyzing your requirements...
         </div>
-        
+
         <div id="result" class="result">
             <div class="gpu-icon"></div>
             <h3>Recommended GPU Solution</h3>
@@ -311,22 +311,22 @@ HTML_TEMPLATE = """
             </div>
         </div>
     </div>
-    
+
     <script>
         document.getElementById('gpuForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const data = {
                 model_size: formData.get('model_size'),
                 throughput_needs: formData.get('throughput_needs'),
                 budget: formData.get('budget')
             };
-            
+
             // Show loading
             document.getElementById('loading').style.display = 'block';
             document.getElementById('result').style.display = 'none';
-            
+
             // Simulate API call delay
             setTimeout(() => {
                 fetch('/api/recommend', {
@@ -339,14 +339,14 @@ HTML_TEMPLATE = """
                 .then(response => response.json())
                 .then(result => {
                     document.getElementById('loading').style.display = 'none';
-                    
+
                     // Update result display
                     document.getElementById('gpu-name').textContent = result.gpu;
                     document.getElementById('gpu-specs').textContent = result.specs;
                     document.getElementById('gpu-cost').textContent = result.cost;
                     document.getElementById('gpu-framework').textContent = result.framework;
                     document.getElementById('gpu-description').textContent = result.description;
-                    
+
                     // Set result background color
                     const resultDiv = document.getElementById('result');
                     resultDiv.style.background = result.color;
@@ -373,14 +373,15 @@ def recommend():
     model_size = data.get('model_size')
     throughput_needs = data.get('throughput_needs')
     budget = data.get('budget')
-    
+
     recommendation = get_gpu_recommendation(model_size, throughput_needs, budget)
     return jsonify(recommendation)
 
 # WSGI handler for Vercel
-from flask import Response
-def handler(environ, start_response):
-    return app.wsgi_app(environ, start_response)
+# IMPORTANT CHANGE: Directly expose the Flask app instance
+# Vercel expects the 'app' variable to be the WSGI callable.
+# Remove the custom 'handler' function, or simply make 'handler' *be* 'app'.
+handler = app
 
 
 if __name__ == '__main__':
